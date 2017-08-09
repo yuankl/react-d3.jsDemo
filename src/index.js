@@ -14,15 +14,16 @@ var H1BGraph = React.createClass({
 		return {rawData: []};
 	},
 	loadRawData: function () {
-		var dateFormat = d3.time.format("%m/%d/%Y");
+		console.log(this.props.url);
+		var dateFormat = d3.timeFormat("%m/%d/%Y");
 		d3.csv(this.props.url)
 			.row(function (d) {
 				if (!d['base salary']) {
 					return null;
 				}
 				return {employer: d.employer,
-					submit_date: dateFormat.parse(d['submit date']),
-					start_date: dateFormat.parse(d['start date']),
+					submit_date: dateFormat(d['submit date']),
+					start_date: dateFormat(d['start date']),
 					case_status: d['case status'],
 					job_title: d['job title'],
 					base_salary: Number(d['base salary']),
@@ -40,6 +41,11 @@ var H1BGraph = React.createClass({
 			}.bind(this));
 	},
 	render: function () {
+		if (!this.state.rawData.length) {
+			return (
+				<h2>Loading data about 81,000 H1B visas in the software industry</h2>
+			);
+		}
 		return (
 			<div className="row">
 				<div className="col-md-12">
@@ -52,6 +58,6 @@ var H1BGraph = React.createClass({
 });
 
 render(
-	<H1BGraph url="data/h1bs.csv" />,
+	<H1BGraph url="public/data/h1bs.csv" />,
 	document.querySelectorAll('.h1bgraph')[0]
 );
