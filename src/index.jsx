@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import { App } from './App';
 var _ = require('lodash'),
 d3 = require('d3');
-
+import {Histogram} from './drawers';
 // render(<App />, document.getElementById('root'));
 var H1BGraph = React.createClass({
 
@@ -46,10 +46,22 @@ var H1BGraph = React.createClass({
 				<h2>Loading data about 81,000 H1B visas in the software industry</h2>
 			);
 		}
+		var params = {
+			bins: 20,
+			width: 500,
+			height: 500,
+			axisMargin: 83,
+			topMargin: 10,
+			bottomMargin: 5,
+			value: function (d) { return d.base_salary; }
+		},
+		fullWidth = 700;
+		console.log("ddd");
 		return (
 			<div className="row">
 				<div className="col-md-12">
-					<svg width="700" height="500">
+					<svg width={fullWidth} height={params.height}>
+						<Histogram {...params} data={this.state.rawData}/>
 					</svg>
 				</div>
 			</div>
