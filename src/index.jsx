@@ -6,6 +6,8 @@ d3 = require('d3');
 import {Histogram} from './drawers';
 // render(<App />, document.getElementById('root'));
 
+import './style.less';
+
 var H1BGraph = React.createClass({
 
 	componentWillMount: function () {

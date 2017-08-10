@@ -25,9 +25,8 @@ var Histogram = React.createClass({
 			.value(this.props.value);
 
 		var bars = this.histogram(props.data),
-			counts = bars.map(function (d) { return d.x1; });
+			counts = bars.map(function (d) { return d.length; });
 
-		console.log(bars);
 
 		this.setState({bars: bars});
 
@@ -36,19 +35,19 @@ var Histogram = React.createClass({
 			.range([9, props.width-props.axisMargin]);
 
 		this.yScale
-			.domain([0, d3.max(bars.map(function (d) { return d.x1+d.x0; }))])
+			.domain([0, d3.max(bars.map(function (d) { return d.x0+d.length; }))])
 			.range([0, props.height-props.topMargin-props.bottomMargin]);
 	},
 	makeBar: function (bar) {
 
-		console.log(bar.x1);
-		var percent = bar.x1/this.props.data.length*100;
+		console.log(bar.length);
+		var percent = bar.length/this.props.data.length*100;
 		var props = {percent: percent,
 			x: this.props.axisMargin,
 			y: this.yScale(bar.x0),
-			width: this.widthScale(bar.x1),
-			height: this.yScale(bar.x0),
-			key: "histogram-bar-"+bar.x+"-"+bar.x1
+			width: this.widthScale(bar.length),
+			height: this.yScale(bar.x1-bar.x0),
+			key: "histogram-bar-"+bar.x0+"-"+bar.length
 		}
 		return (
 			<HistogramBar {...props} />
