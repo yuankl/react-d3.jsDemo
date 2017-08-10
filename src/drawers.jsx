@@ -1,38 +1,55 @@
 var React = require('react'),
 	d3 = require('d3');
+
 var Histogram = React.createClass({
 	componentWillMount: function () {
-		this.histogram = d3.layout.histogram();
-		this.widthScale = d3.scale.linear();
-		this.yScale = d3.scale.linear();
+
+		this.histogram = d3.histogram();
+		this.widthScale = d3.scaleLinear();
+		this.yScale = d3.scaleLinear();
+
 		this.update_d3(this.props);
+
 	},
 	componentWillReceiveProps: function (newProps) {
+
 		this.update_d3(newProps);
+
 	},
 	update_d3: function (props) {
-		console.log(props);
+
+		console.log(props.data);
+
 		this.histogram
-			.bins(props.bins)
+			.thresholds(props.bins)
 			.value(this.props.value);
+
 		var bars = this.histogram(props.data),
-			counts = bars.map(function (d) { return d.y; });
+			counts = bars.map(function (d) { return d.x1; });
+
+		console.log(bars);
+
 		this.setState({bars: bars});
+
 		this.widthScale
 			.domain([d3.min(counts), d3.max(counts)])
 			.range([9, props.width-props.axisMargin]);
+
 		this.yScale
-			.domain([0, d3.max(bars.map(function (d) { return d.x+d.dx; }))])
+			.domain([0, d3.max(bars.map(function (d) { return d.x1+d.x0; }))])
 			.range([0, props.height-props.topMargin-props.bottomMargin]);
 	},
 	makeBar: function (bar) {
-		var percent = bar.y/this.props.data.length*100;
+
+		console.log(bar.x1);
+		var percent = bar.x1/this.props.data.length*100;
 		var props = {percent: percent,
 			x: this.props.axisMargin,
-			y: this.yScale(bar.x),
-			width: this.widthScale(bar.y),
-			height: this.yScale(bar.dx),
-			key: "histogram-bar-"+bar.x+"-"+bar.y}
+			y: this.yScale(bar.x0),
+			width: this.widthScale(bar.x1),
+			height: this.yScale(bar.x0),
+			key: "histogram-bar-"+bar.x+"-"+bar.x1
+		}
 		return (
 			<HistogramBar {...props} />
 		);

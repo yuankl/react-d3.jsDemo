@@ -5,6 +5,7 @@ var _ = require('lodash'),
 d3 = require('d3');
 import {Histogram} from './drawers';
 // render(<App />, document.getElementById('root'));
+
 var H1BGraph = React.createClass({
 
 	componentWillMount: function () {
