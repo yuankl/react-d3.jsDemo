@@ -17,7 +17,6 @@ var H1BGraph = React.createClass({
 		return {rawData: []};
 	},
 	loadRawData: function () {
-		console.log(this.props.url);
 		var dateFormat = d3.timeFormat("%m/%d/%Y");
 		d3.csv(this.props.url)
 			.row(function (d) {
@@ -59,7 +58,6 @@ var H1BGraph = React.createClass({
 			value: function (d) { return d.base_salary; }
 		},
 		fullWidth = 700;
-		console.log("ddd");
 		return (
 			<div className="row">
 				<div className="col-md-12">
